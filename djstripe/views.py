@@ -176,6 +176,12 @@ class ConfirmFormView(LoginRequiredMixin, FormValidMessageMixin, SubscriptionMix
             except stripe.StripeError as exc:
                 form.add_error(None, str(exc))
                 return self.form_invalid(form)
+
+            # if a 'next' parameter is included, go there instead
+            next_page = request.POST.get('next', None)
+            if next_page:
+                self.success_url = next_page
+
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -226,6 +232,11 @@ class ChangePlanView(LoginRequiredMixin, FormValidMessageMixin, SubscriptionMixi
             except stripe.StripeError as exc:
                 form.add_error(None, str(exc))
                 return self.form_invalid(form)
+
+            # if a 'next' parameter is included, go there instead
+            next_page = request.POST.get('next', None)
+            if next_page:
+                self.success_url = next_page
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
